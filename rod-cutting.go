@@ -81,6 +81,42 @@ func bottomUpCutRod(p []int, n int) int {
 	return r[n]
 }
 
+/*
+Bottom-up method saving the solution
+*/
+func extendedBottomUpCutRod(p []int, n int) (int, []int) {
+	r := make([]int, n+1)
+	s := make([]int, n+1)
+
+	r[0] = 0
+
+	for j := 1; j <= n; j++ {
+		q := -1
+		for i := 1; i <= j; i++ {
+			if q < p[i-1]+r[j-i] {
+				q = p[i-1] + r[j-i]
+				s[j] = i
+			}
+		}
+		r[j] = q
+	}
+
+	return r[n], s
+}
+
+func printCutRodSolution(p []int, n int) {
+	r, s := extendedBottomUpCutRod(p, n)
+
+	fmt.Printf("Maximum Obtainable Value is %d\n", r)
+	fmt.Printf("Cuts: ")
+
+	for n > 0 {
+		fmt.Printf("%d ", s[n])
+		n = n - s[n]
+	}
+	fmt.Println()
+}
+
 func max(a, b int) int {
 	if a > b {
 		return a
